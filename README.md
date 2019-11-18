@@ -2,6 +2,7 @@
 
 
 Anyone who wants to add codes for the assignment is free to do so.<br>
+Any improvement to existing code is appreciated.
 
 ## How to contribute.
  - Fork this repository.
