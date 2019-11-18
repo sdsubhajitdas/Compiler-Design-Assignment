@@ -9,6 +9,12 @@ void getType(char [], char [], int);
 /*
 Input: malloc(25*sizeof(int))
 Output: calloc(25,sizeof(int))
+
+Input: malloc(9*sizeof(float))
+Output: calloc(9,sizeof(float))
+
+Input: malloc(256*sizeof(double))
+Output: calloc(256,sizeof(double))
 */
 
 int main(){
@@ -19,7 +25,7 @@ int main(){
     scanf("%[^\n]%*c", string); // string input with spaces.
 
     size = getSize(string);
-    i = 7 + ceil(log10(size)) + 7 + 1; // Index of sizeof bracket
+    i = 7 + floor(log10(size))+ 1 + 7 + 1; // Index of sizeof bracket
     getType(string, type, i);
 
     printf("calloc(%d,sizeof(%s))",size,type);
@@ -39,7 +45,7 @@ void getType(char string[], char type[],int start){
             break;
         else
             type[idx-start] = string[idx];
-    
+
     type[idx] = '\0';
 }
 
