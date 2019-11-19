@@ -6,7 +6,7 @@ Any improvement to existing code is appreciated.
 #### [**DISCUSSION GROUP**](https://github.com/sdsubhajitdas/Compiler-Design-Assignment/issues/1)
 
 ## Status
-#### **Total Done :19 ** 
+#### Total Done :19 
 |Question  	|Status	|   	|Question	|Status	|
 |:-:	|:-:	|---	|---	|---	|
 |[1](1.c) 	|✔️		|		|[2](2.c) 	|✔️		|
