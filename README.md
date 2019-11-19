@@ -6,7 +6,7 @@ Any improvement to existing code is appreciated.
 #### [**DISCUSSION GROUP**](https://github.com/sdsubhajitdas/Compiler-Design-Assignment/issues/1)
 
 ## Status
-#### Total Done :19 
+#### Total Done :22
 |Question  	|Status	|   	|Question	|Status	|
 |:-:	|:-:	|---	|---	|---	|
 |[1](1.c) 	|✔️		|		|[2](2.c) 	|✔️		|
@@ -26,8 +26,8 @@ Any improvement to existing code is appreciated.
 |[29](29.c) 	|✔️		|		|[30](30.c) 	|		|
 |[31](31.c) 	|		|		|[32](32.c) 	|✔️		|
 |[33](33.c) 	|		|		|[34](34.c) 	|✔️		|
-|[35](35.c) 	|		|		|[36](36.c) 	|		|
-|[37](37.c) 	|		|		|[38](38.c) 	|		|
+|[35](35.c) 	|✔️		|		|[36](36.c) 	|		|
+|[37](37.c) 	|		|		|[38](38.c) 	|✔️		|
 |[39](39.c) 	|✔️		|		|[40](40.c) 	|		|
 |[41](41.c) 	|✔️		|		|[42](42.c) 	|		|
 
