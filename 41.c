@@ -1,22 +1,35 @@
-#include "stdio.h"
-#include "string.h"
+// Count uppercase and lowercase letters
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 int main(int argc, char const *argv[])
 {
-	char str[100];int a=0,i,lower=0,upper=0;
-	printf("Enter the string::");
-	scanf("%s",&str);
-	for(i=0;i<str[i]!='\0';i++)
+	FILE *fptr;
+	char file[100], ch;
+	int i, lower = 0, upper = 0;
+
+	printf("Enter the filename: ");
+	scanf("%s", &file);
+
+	fptr = fopen(file, "r");
+	if (fptr == NULL)
 	{
-		if(str[i]>='a' && str[i]<='z')
-		{
-			lower++;
-		}
-		else
-		{
-			upper++;
-		}
+		/* Unable to open file hence exit */
+		printf("\nUnable to open file.\n");
+		printf("Please check whether file exists and you have read/write privilege.\n");
+		exit(EXIT_SUCCESS);
 	}
-	printf("\nNO OF UPPER CASE ALPHABETS::%d",upper);
-	printf("\nNO LOWER CASE ALPHABETS::%d",lower);
+
+	while ((ch = fgetc(fptr)) != EOF)
+	{
+		if (ch >= 'a' && ch <= 'z')
+			lower++;
+		else if (ch >= 'A' && ch <= 'Z')
+			upper++;
+	}
+
+	printf("\nNUMBER OF UPPER CASE ALPHABETS: %d", upper);
+	printf("\nNUMBER LOWER CASE ALPHABETS: %d", lower);
 	return 0;
 }
