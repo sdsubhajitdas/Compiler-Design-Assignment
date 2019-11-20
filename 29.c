@@ -1,26 +1,36 @@
-#include "stdio.h"
-#include "string.h"
+// Uppercase to lowercase and vice-versa
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 int main(int argc, char const *argv[])
 {
-	char str[100];int a=0,i;
-	printf("Enter the string::");
-	scanf("%s",&str);
-	for(i=0;i<str[i]!='\0';i++)
+	FILE *fptr;
+	char file[100], ch;
+	int a = 0, i;
+
+	printf("Enter the filename: ");
+	scanf("%s", &file);
+
+	fptr = fopen(file, "r");
+	if (fptr == NULL)
 	{
-		if(str[i]>='a' && str[i]<='z')
-		{
-			str[i]=str[i]-32;
-			a=1;
-		}
-		else
-		{
-			str[i]=str[i]+32;
-			a=0;
-		}
+		/* Unable to open file hence exit */
+		printf("\nUnable to open file.\n");
+		printf("Please check whether file exists and you have read/write privilege.\n");
+		exit(EXIT_SUCCESS);
 	}
-	if (a==1)
-		printf("\nUPPER CASE ALPHABETS::%s",str);
-	else
-		printf("\nLOWEER CASE ALPHABETS::%s",str);
+
+	while ((ch = fgetc(fptr)) != EOF)
+	{
+		if (ch >= 'a' && ch <= 'z')
+			ch = ch - 32;
+
+		else if (ch >= 'A' && ch <= 'Z')
+			ch = ch + 32;
+
+		printf("%c", ch);
+	}
+
 	return 0;
 }
