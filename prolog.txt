@@ -1,0 +1,385 @@
+/* 1 Sum of a list
+list_sum([1,2,3],X).
+*/
+list_sum([],0).
+list_sum([H|T],Total):-
+    list_sum(T,Sum1),Total is H+Sum1.
+
+
+/* 2 Maximum of two elements
+max(2,3).
+*/
+max(A,B):-A>B,write('Larger number is '),write(A).
+max(A,B):-A<B,write('Larger number is '),write(B).
+max(A,B):-A=B,write('Both are equal ').
+
+
+/* 3 Length of the list
+len([1,2,3],X).
+*/
+len([], 0).
+len([H|T], N) :- len(T, N1), N is N1+1.
+
+
+/* 4 GCD
+gcd(5,20).
+*/
+gcd(X,Y):-
+    X=Y,write('GCD of two numbers is '),write(X);
+    X=0,write('GCD of two numbers is '),write(Y);
+    Y=0,write('GCD of two numbers is '),write(X);
+    Y>X,Y1 is Y-X,gcd(X,Y1);
+    X>Y,Y1 is X-Y,gcd(Y1,Y).
+
+
+/* 5 Check same length of list
+size([1,2,3],[2,4]).
+size([1,2,3],[2,4,5]).
+*/
+size(X,Y):-
+    findlen1(X,C1),
+    findlen2(Y,C2),
+    C1=C2, write("\nEqual");
+    write("Not Equal").
+
+findlen1([],0).
+findlen1([_|T],Count):- findlen1(T,Prev), Count is Prev+1.
+
+findlen2([],0).
+findlen2([_|T],Count):- findlen2(T,Prev), Count is Prev+1.
+
+
+/* 6 Concatenate two list
+concatenate([1,2],[3,5,7],X).
+*/
+concatenate(List1, List2, Result):- append(List1, List2, Result).
+
+
+/* 7 Maximum element of list
+maxlist([2,5,7],X).
+*/
+maxlist([X],X).
+maxlist([X,Y|T],MAX):- X>Y, maxlist([X|T],MAX).
+maxlist([X,Y|T],MAX):- X=<Y, maxlist([Y|T],MAX).
+
+
+/* 8 Factorial of an element
+fact(5,X).
+*/
+fact(0,1).
+fact(N,F):-
+	N>0, N1 is N-1, fact(N1,F1), F is N*F1;
+	N1 is N+1, fact(N1,F1), F is N*F1.
+
+
+/* 9 Fibonacci series
+fib(6,X).
+*/
+fib(0,0).
+fib(1,1).
+fib(N,NF):-
+	N>1, A is N-1,B is N-2,
+ 	fib(A,AF),fib(B,BF),
+ 	NF is AF+BF.
+
+
+/* 10 K'th element of a list.
+match([1,2,3,4],3,Output).
+*/
+match([H|_],0,H).
+match([_|T],N,H):- N>0, N1 is N-1, match(T,N1,H).
+
+
+/* 11 Whether a list consist of exactly two elements of list.
+count(2,a,0,[a,b,c]).
+count(2,a,0,[a,b,a,c]).
+*/
+count(C,_,C,[]).
+count(Total,Item,Count,[H|T]):-
+	Item=H,
+	Count1 is Count+1,
+	count(Total,Item,Count1,T).
+count(Total,Item,Count,[H|T]):-
+    Item\=H,
+	count(Total,Item,Count,T).
+
+
+/* 12 Element X is a member of a list L. 
+present(2,[1,2,3]).
+*/
+present(X,[X|_]).
+present(X,[_|T]):- present(X,T).
+
+
+/* 13 Reverse of a list
+reverse([1,2,3],Output).
+*/
+reverse([],Z,Z).
+reverse([H|T],Z,Acc):- reverse(T,Z,[H|Acc]).
+
+
+/* 14 Add an element to an existing list.
+add(4,[1,2,3],Output).
+*/
+add(X,List,[X|List]).
+
+
+/* 15 Define a predicate between which generates all integers X
+OUTPUT NOT FOUND
+*/
+next_integer(I):-next_integer(1,I).
+next_integer(I,J).
+next_integer(I,J):-
+    I2 is I+1,
+	next_integer(I2,J).
+
+
+/* 16 Find last element
+list([1,3,5]).
+*/
+list([X]):-
+    write("Last element is: "), write(X).
+list([_|T]):-
+    list(T).
+
+
+/* 17 Delete all occurrence of an element
+delMember(2,[1,2,3],Output).
+*/
+delMember(_, [], []).
+delMember(X, [X|Xs], Y) :- delMember(X, Xs, Y).
+delMember(X, [T|Xs], [T|Y]) :- dif(X, T), delMember(X, Xs, Y).
+
+
+/* 18 Test whether a list X is a subset of a list Y
+subset([1,2,3],[1,2]).
+*/
+subset([],[]).
+subset([E|T],[E|T1]):- subset(T,T1).
+subset([_|T],T1):- subset(T,T1).
+
+
+/* 19 Find the intersect(common) of two list X and Y
+intersect([1,2,3],[2,7],Output).
+*/
+intersect([], _, []).
+intersect([H1|T1], L2, [H1|Res]):- member(H1, L2), intersect(T1, L2, Res).
+intersect([_|T1], L2, Res):- intersect(T1, L2, Res).
+
+
+/* 20 Find the union of two list X and Y
+uni([1,2,3],[a,b],Output).
+*/
+uni([],[],[]).
+uni(List1,[],List1).
+uni(List1, [Head2|Tail2], [Head2|Output]):- \+(member(Head2,List1)), union(List1,Tail2,Output).
+uni(List1, [Head2|Tail2], Output):- member(Head2,List1), union(List1,Tail2,Output).
+
+
+/* 21 Divide a list in two list which are appropriately of same length
+div([1,2,3,4],X,Y).
+*/
+div(L,A,B):-
+    append(A,B,L),
+    length(A,N),
+ 	length(B,N).
+
+
+/* 22 Find the maximum of two elements using CUT
+max(2,3,Output).
+*/
+max(X,Y,Max):-
+	X>=Y,!,Max=X;
+ 	Max=Y.
+
+
+/* 23 Find the sum of a list using accumulator.
+sum([1,2,3],Output).
+*/
+sum([],0).
+sum([H|T],N):- sum(T,N1),N is N1+H. 
+
+
+/* 24 Find the length of list using accumulator
+size([1,2,3],Output).
+*/
+size([],0).
+size([_|T],N):- size(T,N1), N is N1+1.
+
+
+/* 25 Find the maximum of a list elements using CUT
+max([1,2,3,5],Output).
+*/
+max([X],X):- !,true.
+max([X],X):-false.
+max([X|Xs],M):- max(Xs,M), M>=X.
+max([X|Xs],X):- max(Xs,M), X>M. 
+
+
+/* 26 Find the GCD of two elements with CUT
+gcd(2,10,Output).
+*/
+gcd(0,X,X):- X>0, !.
+gcd(X,Y,Z):- 
+    X>=Y,
+    X1 is X-Y,
+    gcd(X1,Y,Z).
+gcd(X,Y,Z):-
+ 	Y>X,
+    X1 is Y-X,
+    gcd(X1,X,Z).
+
+
+/* 27 Find the GCD of list
+gcdL([24,48,12],Output).
+*/
+gcd(0,X,X):- X > 0, !.
+gcd(X,Y,Z):-
+ 	X>=Y,
+    X1 is X -Y,
+    gcd(X1,Y,Z).
+gcd(X,Y,Z):-
+	X<Y,
+    X1 is Y-X,
+    gcd(X1,X,Z).
+
+gcdL([H,H1|T],Z):- gcd(H,H1,X),gcdL([X|T],Z).
+gcdL([H1,H2],Z):-gcd(H1,H2,Z). 
+
+
+/* 28 Reverse a list using accumulator
+reverse([1,2,3],Output).
+*/
+reverse([],Z,Z).
+reverse([H|T],Z,Acc):- reverse(T,Z,[H|Acc]).
+
+
+/* 29 Select an element from a list.
+match([1,2,3,4],2,Output).
+*/
+match([H|_],0,H):- !.
+match([_|T],N,H):-
+ 	N>0,
+ 	N1 is N-1,
+ 	match(T,N1,H).
+
+
+/* 30 Merge sort
+mergesort([2,56,1,34],Output).
+*/
+mergesort([],[]).
+mergesort([A],[A]).
+mergesort([A,B|R],S):-
+	split([A,B|R],L1,L2),
+ 	mergesort(L1,S1),
+ 	mergesort(L2,S2),
+ 	merge(S1,S2,S).
+
+split([],[],[]).
+split([A],[A],[]).
+split([A,B|R],[A|Ra],[B|Rb]):- split(R,Ra,Rb).
+
+merge(A,[],A).
+merge([],B,B).
+merge([A|Ra],[B|Rb],[A|M]):-
+    A =< B, merge(Ra,[B|Rb],M).
+merge([A|Ra],[B|Rb],[B|M]):-
+	A > B, merge([A|Ra],Rb,M).
+
+
+/* 31 Quick sort.
+qsort([2,5,1,8],Output).
+*/
+qsort( [], [] ).
+qsort( [H|U], S ) :-
+	splitBy(H, U, L, R),
+ 	qsort(L, SL),
+ 	qsort(R, SR),
+ 	append(SL, [H|SR], S).
+
+splitBy( _, [], [], []).
+splitBy( H, [U|T], [U|LS], RS):-
+	U =< H,
+ 	splitBy(H, T, LS, RS).
+splitBy(H, [U|T], LS, [U|RS]):-
+	U > H,
+ 	splitBy(H, T, LS, RS).
+
+
+/* 32 Permutation sort
+sortL([2,5,1,8],Output).
+*/
+sorted([]).
+sorted([A]).
+sorted([A,B|T]):-
+	A=<B,
+ 	sorted([B|T]).
+
+sortL(A,B) :-
+	permutation(A,B),
+	sorted(B).
+
+
+/* 33 Insertion sort.
+insertionSort([2,5,1,7],Output).
+*/
+insert(X, [], [X]):- !.
+insert(X, [X1|L1], [X, X1|L1]):- X=<X1, !.
+insert(X, [X1|L1], [X1|L]):- insert(X, L1, L).
+
+insertionSort([], []):- !.
+insertionSort([X|L], S):- insertionSort(L, S1), insert(X, S1, S).
+
+
+/* 34 Selection sort.
+ssort(Output,[2,5,1,7]).
+*/
+ssort([],[]).
+ssort([M1|S],[H|T]):-
+ 	min(H,T,M1),
+ 	remove(M1,[H|T],N),
+ 	ssort(S,N).
+
+min(M,[],M).
+min(M,[H|T],M1):- 
+    min2(M,H,N),
+ 	min(N,T,M1).
+
+min2(A,B,A):-less(A,B).
+min2(A,B,B):-not(less(A,B)).
+
+less(A,B):-(A<B).
+
+appnd([],B,B).
+appnd([H|A],B,[H|AB]):-appnd(A,B,AB).
+
+remove(X,L,N):-append(A,[X|B],L),appnd(A,B,N). 
+
+
+/* 35 Bubble sort
+bubblesort([2,5,1,7],Output).
+*/
+bubblesort(InputList,SortList) :-
+    swap(InputList,List) , ! ,
+ 	printlist(List),
+ 	bubblesort(List,SortList).
+bubblesort(SortList,SortList).
+
+swap([X,Y|List],[Y,X|List]) :- X > Y.
+swap([Z|List],[Z|List1]) :- swap(List,List1).
+
+printlist([]) :- nl.
+printlist([Head|List]) :-write(Head), write(" "), printlist(List).
+
+
+
+
+
+
+
+
+
+
+
+
+

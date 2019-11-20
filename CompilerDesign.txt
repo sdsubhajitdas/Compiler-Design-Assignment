@@ -1,0 +1,1931 @@
+/* 1 Program to recognize identifiers 
+
+Input:
+123_abc
+Output:
+It is not valid identifier
+
+Input:
+abc
+Output:
+It is valid identifier
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char string[25];
+    int count = 0, flag;
+    printf("enter any string: ");
+    gets(string);
+    if ((string[0] >= 'a' && string[0] <= 'z') //small letter
+        ||
+        (string[0] >= 'A' && string[0] <= 'Z') //cap letter
+        ||
+        (string[0] == '_') //underscore
+    )
+    {
+        for (int i = 1; i <= strlen(string); i++)
+        {
+            if ((string[i] >= 'a' && string[i] <= 'z') ||
+                (string[i] >= 'A' && string[i] <= 'Z') ||
+                (string[i] >= '0' && string[i] <= '9') ||
+                (string[i] == '-'))
+            {
+                count++;
+            }
+        }
+        if (count == strlen(string))
+        {
+            flag = 0;
+        }
+    }
+    else
+    {
+        flag = 1;
+    }
+    if (flag == 1)
+        printf("It is not valid identifier");
+    else
+        printf("It is valid identifier");
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+/* 2 Program to print number of tokens in another C program (input a string)
+
+Input:
+int a = 10 ;
+Output:
+int
+a
+=
+10
+
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+void substring(char[], char[], int, int);
+
+int main()
+{
+    char str[500];
+    char token[50];
+    int idx, i = 0;
+
+    printf("Enter a string:\n");
+    scanf("%[^\n]%*c", str); // string input with spaces.
+
+    for (idx = 0; str[idx] != '\0'; idx++)
+    {
+        // Tokenizing at space and semicolon.
+        if (str[idx] == ' ' || str[idx] == ';')
+        {
+            substring(str, token, i, idx);
+            printf("%s \n", token);
+            i = idx + 1;
+        }
+    }
+}
+
+void substring(char string[], char sub[], int start, int end)
+{
+    /* Substring function.
+    string - Actual String from which substring will be made.
+    sub - Substring created will be stored here.
+    start - Starting index.
+    end - Ending index + 1.
+    */
+    int idx = 0;
+
+    while (start < end)
+    {
+        sub[idx] = string[start];
+        idx++;
+        start++;
+    }
+    sub[idx] = '\0';
+}
+
+
+
+
+
+
+
+
+
+
+/* 3 Program that will replace a malloc() function to calloc() function with
+    appropriate parameters.(E.g.- Input: malloc(2 * sizeof(int)),
+                                  Output: calloc(2, sizeof(int))) 
+                                  
+Input: malloc(25*sizeof(int))
+Output: calloc(25,sizeof(int))
+Input: malloc(9*sizeof(float))
+Output: calloc(9,sizeof(float))
+Input: malloc(256*sizeof(double))
+Output: calloc(256,sizeof(double))
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+int getSize(char[]);
+void getType(char[], char[], int);
+
+int main()
+{
+    char string[500], type[20];
+    int size, i;
+    printf("Enter the malloc statement\n");
+    scanf("%[^\n]%*c", string); // string input with spaces.
+    size = getSize(string);
+    i = 7 + floor(log10(size)) + 1 + 7 + 1; // Index of sizeof bracket
+    getType(string, type, i);
+    printf("calloc(%d,sizeof(%s))", size, type);
+    return 0;
+}
+void getType(char string[], char type[], int start)
+{
+    /* Separates the type used in malloc
+	Eg: malloc(25*sizeof(int))
+	Separates int
+	*/
+    int idx;
+
+    for (idx = start; string[idx] != '\0'; idx++)
+        if (string[idx] == ')')
+            break;
+        else
+            type[idx - start] = string[idx];
+
+    type[idx] = '\0';
+}
+int getSize(char string[])
+{
+    /* Returns the size used in malloc
+	Eg: malloc(25*sizeof(int))
+	Returns 25
+	*/
+
+    int idx, size = 0;
+
+    for (idx = 7; string[idx] != '\0'; idx++)
+        if (string[idx] == '*')
+            break;
+        else
+            size = size * 10 + (string[idx] - '0');
+    return size;
+}
+
+
+
+
+
+
+
+
+
+
+/* 4 Program to find the number of alphabets, digits and special characters in a given input 
+
+Input:
+hello_?10
+Output:
+Alphabets = 5
+Digits = 2
+Special characters = 2
+*/
+
+#include <stdio.h>
+#define MAX_SIZE 100 // Maximum string size
+
+int main()
+{
+    char str[MAX_SIZE];
+    int alphabets, digits, others, i;
+
+    alphabets = digits = others = i = 0;
+
+    /* Input string from user */
+    printf("Enter any string : ");
+    gets(str);
+
+    /*
+	* Check each character of string for alphabet, digit or special character
+	*/
+
+    while (str[i] != '\0')
+    {
+        if ((str[i] >= 'a' && str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z'))
+        {
+            alphabets++;
+        }
+        else if (str[i] >= '0' && str[i] <= '9')
+        {
+            digits++;
+        }
+        else
+        {
+            others++;
+        }
+        i++;
+    }
+
+    printf("Alphabets = %d\n", alphabets);
+    printf("Digits = %d\n", digits);
+    printf("Special characters = %d", others);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+/* 5 Program which will take a C file as input and find out the total memory space
+	 required for allocating all the variables and check if it exceeds a certain limit.(which is
+	 taken as user input) 
+
+Input: int a,b,c;float x,y;
+Output: Total memory required 20 bytes
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int parseLine(char[]);
+int countVariables(char[]);
+void parseType(char[], char[]);
+
+int main()
+{
+    char string[1000];
+    char *line;
+    int totalSize = 0;
+    scanf("%[^\n]%*c", string);
+    line = strtok(string, ";");
+
+    do
+    {
+        totalSize += parseLine(line);
+        line = strtok(NULL, ";");
+    } while (line != NULL);
+
+    printf("Total memory required %d bytes", totalSize);
+    return 0;
+}
+int parseLine(char line[])
+{
+
+    /* Parses a single line for data type used and no. of variables.
+	*/
+
+    char type[50];
+    int varCount, size = 0;
+
+    parseType(line, type);
+    varCount = countVariables(line);
+
+    // Calculating the space required according to the datatype.
+    if (strcmp(type, "int") == 0)
+        size = sizeof(int);
+    else if (strcmp(type, "char") == 0)
+        size = sizeof(char);
+    else if (strcmp(type, "double") == 0)
+        size = sizeof(double);
+    else if (strcmp(type, "float") == 0)
+        size = sizeof(float);
+
+    return size * varCount;
+}
+int countVariables(char line[])
+{
+
+    // Counts number of variable used
+
+    char *ch = line;
+    int count = 1;
+
+    while (*ch != '\0')
+    {
+        if (*ch == ',')
+            count++;
+        ch += 1;
+    }
+
+    return count;
+}
+void parseType(char line[], char type[])
+{
+
+    // Parser to identify the datatype used.
+
+    char *ch = line;
+    int i = 0;
+
+    while (*ch != ' ')
+    {
+        type[i] = *ch;
+        ch += 1;
+        i++;
+    }
+    type[i] = '\0';
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 6 Program to recognize keyword 
+
+Input: Filename test.txt
+Output: void, int,
+
+INSIDE test.txt
+void main()
+{
+    int a = 10;
+}
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int isKeyword(char []);
+
+/*
+Input: Filename test.txt
+Output: void, int,
+inside test.txt
+void main()
+{
+	int a = 10;
+}
+*/
+
+int main(){
+	FILE *fptr;
+	char filename[100], ch, word[100];
+	int i=0;
+	
+	printf("Enter file name:\n");
+	scanf("%[^\n]%*c", filename);
+	
+	// Reading from a file char by char.
+	fptr = fopen(filename,"r");
+	if(fptr == NULL){
+	printf("File not found");return 0;
+	}
+	ch = fgetc(fptr);
+	
+	while (ch != EOF) //Till End Of File
+	{
+		// Tokenizing a word.
+		
+		if(ch == ' '|| ch == ';'){
+			word[i] = '\0';
+			i=0;
+			if(isKeyword(word)==1)
+			printf("%s, ",word);
+		}
+		else
+			word[i++] = ch;
+		
+		ch = fgetc(fptr); // Reading next char.
+	}
+	fclose(fptr); // Closing input stream.
+	return 0;
+}
+int isKeyword(char word[]){
+	// C has only 32 keywords all are here.
+	
+	if (!strcmp(word, "auto") || !strcmp(word, "default")
+		|| !strcmp(word, "signed") || !strcmp(word, "enum")
+		||!strcmp(word, "extern") || !strcmp(word, "for")
+		|| !strcmp(word, "register") || !strcmp(word, "if")
+		|| !strcmp(word, "else") || !strcmp(word, "int")
+		|| !strcmp(word, "while") || !strcmp(word, "do")
+		|| !strcmp(word, "break") || !strcmp(word, "continue")
+		|| !strcmp(word, "double") || !strcmp(word, "float")
+		|| !strcmp(word, "return") || !strcmp(word, "char")
+		|| !strcmp(word, "case") || !strcmp(word, "const")
+		|| !strcmp(word, "sizeof") || !strcmp(word, "long")
+		|| !strcmp(word, "short") || !strcmp(word, "typedef")
+		|| !strcmp(word, "switch") || !strcmp(word, "unsigned")
+		|| !strcmp(word, "void") || !strcmp(word, "static")
+		|| !strcmp(word, "struct") || !strcmp(word, "goto")
+		|| !strcmp(word, "union") || !strcmp(word, "volatile"))
+		return 1;
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 7 Program that should check if all the members of the structures are having a
+	 defined data type. If not, print an error 
+
+Input: Filename test.txt
+Output: The structure has valid datatypes
+
+INSIDE test.txt
+struct demo
+{
+int a;
+float b;
+}
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int checkForBracket(char[], char);
+int parseValidDataType(char[]);
+
+int main()
+{
+    FILE *fptr;
+    char ch, filename[50], token[50];
+    int i = 0, bracOpen = 0, validTypes = 1;
+    char line[500];
+
+    printf("Enter file name:\n");
+    scanf("%[^\n]%*c", filename);
+
+    fptr = fopen(filename, "r");
+
+    if (fptr == NULL)
+    {
+        printf("File not found");
+        return 0;
+    }
+
+    while (fgets(line, sizeof(line), fptr) != NULL)
+    {
+        if (bracOpen != 1) // Checks for opening bracket
+            if (checkForBracket(line, '{'))
+                bracOpen = 1;
+
+            else
+            {
+                validTypes = parseValidDataType(line);
+                if (checkForBracket(line, '}') || validTypes == 0) // closing bracket check
+                    break;
+            }
+    }
+
+    if (validTypes == 1)
+        printf("The structure has defined datatypes\n");
+    else
+        printf("The structure has invalid datatypes\n");
+
+    fclose(fptr);
+    return 0;
+}
+
+int parseValidDataType(char line[])
+{
+    // Checks if the datatype is known or not
+    char type[50];
+    int i = 0;
+
+    while (line[i] != ' ')
+    {
+        type[i] = line[i];
+        i++;
+    }
+
+    type[i] = '\0';
+
+    if (checkForBracket(type, '}') == 1)
+        return 1;
+
+    if (!strcmp(type, "int") || !strcmp(type, "char") || !strcmp(type, "float") || !strcmp(type, "double"))
+        return 1;
+
+    return 0;
+}
+
+int checkForBracket(char line[], char bracket)
+{
+    // Checks if the bracket is present in the line or not.
+
+    for (int i = 0; line[i] != '\0'; i++)
+        if (line[i] == bracket)
+            return 1;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 8 Program to ignore the comments in the given input source program(i.e., delete them) 
+Input: Filename test.txt
+Output:
+void main()
+{
+int a=10;
+printf("%d",a);
+}
+
+INSIDE test.txt
+void main()
+{
+int a=10;
+// Printing a variable;
+printf("%d",a);
+}
+
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int checkIfCommentLine(char[]);
+
+int main()
+{
+    FILE *fptr;
+    char line[1000], filename[100], ch, program[10000];
+    int i = 0;
+
+    program[0] = '\0';
+
+    printf("Enter file name:\n");
+    scanf("%[^\n]%*c", filename);
+
+    fptr = fopen(filename, "r");
+    if (fptr == NULL)
+    {
+        printf("File not found");
+        return 0;
+    }
+
+    ch = fgetc(fptr);
+
+    while (ch != EOF)
+    {
+
+        // Reads a single line and prints it if not a comment.
+
+        if (ch == '\n')
+        {
+            line[i] = '\0';
+            i = 0;
+            if (!checkIfCommentLine(line))
+                printf("%s\n", line);
+        }
+        else
+        { // Making a single line
+            line[i] = ch;
+            i++;
+        }
+
+        ch = fgetc(fptr);
+    }
+    line[i] = '\0';
+    printf("%s", line);
+}
+int checkIfCommentLine(char line[])
+{
+    if (line[0] == '/' && line[1] == '/')
+        return 1;
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 9 Program that will check whether the input string is containing “Monday” in it 
+
+Input: hello monday is good day
+Output: SEARCH SUCCESSFUL!
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    char str[80], search[10];
+    int count1 = 0, count2 = 0, i, j, flag;
+
+    printf("Enter a string:");
+    gets(str);
+    printf("Enter search substring:");
+    gets(search);
+
+    while (str[count1] != '\0')
+        count1++;
+    while (search[count2] != '\0')
+        count2++;
+
+    for (i = 0; i <= count1 - count2; i++)
+    {
+        for (j = i; j < i + count2; j++)
+        {
+            flag = 1;
+            if (str[j] != search[j - i])
+            {
+                flag = 0;
+                break;
+            }
+        }
+        if (flag == 1)
+            break;
+    }
+
+    if (flag == 1)
+        printf("SEARCH SUCCESSFUL!");
+    else
+        printf("SEARCH UNSUCCESSFUL!");
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 11 Program that will take a C file as an input and output a file which will have
+	  \n and \b replaced by corresponding spaces 
+
+Input: hello\nworld or hello\tworld
+Output:
+hello
+world or hello  world
+*/
+
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char str[100];
+	printf("Enter a string : ");
+	gets(str);
+	
+	int l=strlen(str);
+	
+	for(int i=0;i<l;i++)
+	{
+		if(str[i]==92)
+		{
+			if(str[i+1]=='t')
+			{
+				str[i]=' ';
+				str[i+1]=' ';
+			}
+			else
+			{
+				str[i]=' ';
+				str[i+1]='\n';
+			}
+		}
+	}
+	
+	printf("%s",str);
+	return 0;
+	
+	//TAKE A LINE AS AN INPUT
+	//E.G.--- hello\nworld or hello\tworld
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 12 Program that will check whether all the variables declared in an input file
+	  are initialized or not. If not,initialize them with 0 
+
+*/
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int main()
+{
+	int a=2,b=0,c;
+	
+	if( !c)
+	{
+		c=0;
+		printf("Value of the variable after initialization=%d",c);
+	}
+	else
+	{
+		printf("Value of the variable is=%d",c );
+	}
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 13 Program to identify whether a given line is a comment or not 
+
+Input: //this is a comment 
+Output: It is a Comment.
+
+Input: /*double d;printf(“Hello”);*/
+/*Output: It is a Comment.
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    char text[100];
+    int i = 2, a = 0;
+
+    printf("\n\nEnter Text : ");
+
+    gets(text);
+    if (text[0] == '/')
+    {
+        if (text[1] == '/')
+        {
+            printf("\nIt is a Comment.");
+        }
+        else if (text[1] == '*')
+        {
+            for (i = 2; i <= 100; i++)
+            {
+                if (text[i] == '*' && text[i + 1] == '/')
+                {
+                    a = 1;
+                    break;
+                }
+                else
+                    continue;
+            }
+            if (a == 0)
+            {
+                printf("\nIt is Not a Comment.");
+            }
+            else
+            {
+                printf("\nIt is a Comment.");
+            }
+        }
+        else
+        {
+            printf("\nIt is Not a Comment.");
+        }
+        return 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 14 Program to simulate lexical analyzer for validating operators 
+Input: a+b=c
+Output:
+Operator: + is at location 1
+Operator: = is at location 3
+*/
+
+#include <stdio.h>
+#define max 40
+#include <string.h>
+
+int main(int argc, char const *argv[])
+{
+    char ch[max];
+    printf("Enter the statement::");
+    scanf("%s", &ch);
+
+    for (int i = 0; i < strlen(ch); i++)
+    {
+        if (ch[i] == '+' || ch[i] == '-' || ch[i] == '*' || ch[i] == '%' || ch[i] == '/' || ch[i] == '=')
+            printf("\nOperator: %c is at location %d", ch[i], i);
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 15 Program to replace all the digits in a file to their corresponding words. Use a
+	 switch case 
+
+Input: 123
+Output: One Two Three
+*/
+
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+	int n, num = 0, digits;
+	printf("Enter any number to print in words: ");
+	scanf("%d", &n);
+	
+	/* Find total digits in n */
+	
+	digits = (int) log10(n);
+	
+	while(n != 0)
+	{
+		num = (num * 10) + (n % 10);
+		n /= 10;
+	}
+	
+	digits = digits - ((int) log10(num));
+	
+	/*
+	* Extract last digit of number and print corresponding number in words
+	* till num becomes 0
+	*/
+	
+	while(num != 0)
+	{
+		switch(num % 10)
+		{
+			case 0:
+				printf("Zero ");
+				break;
+			case 1:
+				printf("One ");
+				break;
+			case 2:
+				printf("Two ");
+				break;
+			case 3:
+				printf("Three ");
+				break;
+			case 4:
+				printf("Four ");
+				break;
+			case 5:
+				printf("Five ");
+				break;
+			case 6:
+				printf("Six ");
+				break;
+			case 7:
+				printf("Seven ");
+				break;
+			case 8:
+				printf("Eight ");
+				break;
+			case 9:
+				printf("Nine ");
+				break;
+		}
+		num /= 10;
+	}
+	
+	while(digits)
+	{
+		printf("Zero ");
+		digits--;
+	}
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 16 Program in C that will take two files as input and merge them into one and
+	  delete any redundant words from the resulting file 
+Input:
+abc.txt
+bc.txt
+
+Output:
+hello world world bad
+
+INSIDE abc.txt
+hello world
+
+INSIDE bc.txt
+world bad
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    FILE *fs1, *fs2, *ft;
+    char ch, file1[20], file2[20], file3[20];
+
+    printf("Enter name of first file\n");
+    gets(file1);
+
+    printf("Enter name of second file\n");
+    gets(file2);
+
+    printf("Enter name of file which will store contents of the two files\n");
+    gets(file3);
+
+    fs1 = fopen(file1, "r");
+    fs2 = fopen(file2, "r");
+
+    if (fs1 == NULL || fs2 == NULL)
+    {
+        perror("Error ");
+        printf("Press any key to exit...\n");
+        exit(EXIT_FAILURE);
+    }
+
+    ft = fopen(file3, "w"); // Opening in write mode
+
+    if (ft == NULL)
+    {
+        perror("Error ");
+        printf("Press any key to exit...\n");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((ch = fgetc(fs1)) != EOF)
+        fputc(ch, ft);
+
+    while ((ch = fgetc(fs2)) != EOF)
+        fputc(ch, ft);
+
+    printf("The two files were merged into %s file successfully.\n", file3);
+
+    fclose(fs1);
+    fclose(fs2);
+    fclose(ft);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* 17 Program to find if a given grammar is Context free or not 
+Input:
+S
+aAb
+Output:
+CFG
+
+Input:
+aAb
+aab
+Output:
+Not
+*/
+
+#include <stdio.h>
+
+int all_upper(char ch[5])
+{
+    int i = 0, flag = 1;
+
+    for (; ch[i] != '\0'; i++)
+        if (ch[i] > 'Z')
+            flag = 0;
+
+    return flag;
+}
+int all_lower(char ch[5])
+{
+    int i = 0, flag = 1;
+
+    for (; ch[i] != '\0'; i++)
+        if (ch[i] < 'Z')
+            flag = 0;
+
+    return flag;
+}
+int main()
+{
+    char left[5], right[5];
+
+    printf("Enter the left production: ");
+    scanf("%s", left);
+
+    fflush(stdin);
+
+    printf("\nEnter the right production: ");
+    scanf("%s", right);
+
+    //if(all_upper(left) && all_lower(right))
+
+    if (all_upper(left))
+        printf("CFG");
+    else
+        printf("Not");
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 18 Program to count the number of white spaces between two consecutive
+	  tokens in a program and replace it with a single whitespace 
+
+*/
+
+#include <ctype.h>
+#include <stdio.h>
+
+void strip_extra_spaces(char *str)
+{
+    int i, x;
+
+    for (i = x = 0; str[i]; ++i)
+        if (!isspace(str[i]) || (i > 0 && !isspace(str[i - 1])))
+            str[x++] = str[i];
+    str[x] = '\0';
+}
+int main(int argc, char *argv[])
+{
+    char str[] = " If you gaze into   the abyss, the abyss   gazes also into   you. ";
+
+    //CHANGE IT ACCORDING TO THE INPUT
+
+    strip_extra_spaces(str);
+    printf("%s\n", str);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 19 Program in C to find the First and Follow for a given set of productions 
+*/
+
+#include<stdio.h>
+#include<string.h>
+#include<conio.h>
+
+int main()
+{
+	char t[5],nt[10],p[5][5],first[5][5],temp;
+	int i,j;
+	int z=0;
+	int nont=0;
+	int k=0,f=0;
+	
+	printf("\nEnter the no. of Non-terminals in the grammer:");
+	scanf("%d",&nont);
+	
+	printf("\nEnter the Non-terminals in the grammer:\n");
+	for(i=0;i<nont;i++)
+	{
+		scanf("\n%c",&nt[i]);
+	}
+	
+	printf("\nEnter the no. of Terminals in the grammer: ( Enter { for absiline )");
+	scanf("%d",&z);
+	
+	printf("\nEnter the Terminals in the grammer:\n");
+	for(i=0;i<z||t[i]=='$';i++)
+	{
+		scanf("\n%c",&t[i]);
+	}
+	for(i=0;i<nont;i++)
+	{
+		p[i][0]=nt[i];
+		first[i][0]=nt[i];
+	}
+	
+	printf("\nEnter the productions :\n");
+	for(i=0;i<nont;i++){
+		scanf("%c",&temp);
+		printf("\nEnter the production for %c ( End the production with '$'sign ) :",p[i][0]);
+		
+		for(j=0;p[i][j]!='$';)
+		{
+			j+=1;
+			scanf("%c",&p[i][j]);
+		} 
+	}
+	
+	for(i=0;i<nont;i++)
+	{
+		printf("\nThe production for %c -> ",p[i][0]);
+		for(j=1;p[i][j]!='$';j++)
+		{
+			printf("%c",p[i][j]);
+		} 
+	}
+	for(i=0;i<nont;i++)
+	{
+		f=0;
+		for(j=1;p[i][j]!='$';j++)
+		{
+			for(k=0;k<z;k++)
+			{
+				if(f==1)
+				break;
+				if(p[i][j]==t[k])
+				{
+					first[i][j]=t[k];
+					first[i][j+1]='$';
+					f=1;
+					break;
+				}
+				else if(p[i][j]==nt[k])
+				{
+					first[i][j]=first[k][j];
+					
+					if(first[i][j]=='{')
+						continue;
+					
+					first[i][j+1]='$';
+					f=1;
+					break;
+				} 
+			} 
+		} 
+	}
+	
+	for(i=0;i<nont;i++)
+	{
+		printf("\n\nThe first of %c -> ",first[i][0]);
+		
+		for(j=1;first[i][j]!='$';j++)
+		{
+			printf("%c\t",first[i][j]);
+		} 
+	}
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+/* 20 Program to find if a given grammar is Context sensitive or not 
+Input:
+aSb
+atb
+Output:
+yes
+
+Input:
+abSt
+df
+Output:
+Not
+*/
+
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char str[20];
+	printf("Enter left side of production : ");
+	gets(str);
+	
+	char str2[20];
+	printf("Enter right side of production : ");
+	gets(str2);
+	
+	int l1=strlen(str);
+	int l2=strlen(str2);
+	
+	if((str[0]==str2[0])&&(str[l1-1]==str2[l2-1]))
+		printf("The grammar is context-sensitive");
+	else
+		printf("The grammar is not context-sensitive");
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 21 Program in C which can recognize a web address 
+Input: https://www.google.com
+Output: Valid
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char str[100];
+    printf("Enter string : ");
+    gets(str);
+
+    int flag = 0;
+    int l = strlen(str);
+    if ((str[0] == 'h'))
+
+        flag++;
+
+    if ((str[1] == 't'))
+        flag++;
+    if ((str[2] == 't'))
+        flag++;
+    if ((str[3] == 'p'))
+        flag++;
+    if ((str[4] == 's'))
+        flag++;
+    if ((str[5] == ':'))
+        flag++;
+    if ((str[6] == '/') && (str[7] == '/'))
+        flag++;
+    if ((str[8] == 'w') && (str[9] == 'w') && (str[10] == 'w') && (str[11] == '.'))
+        flag++;
+    if ((str[l - 1] == 'm') || (str[l - 1] == 'n') || (str[l - 1] == 'g'))
+        flag++;
+    if (flag >= 9)
+        printf("\nValid web address.");
+    if (flag <= 8)
+        printf("\nNot a valid web address.");
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 22 Program to convert all the lowercase alphabets in a file to uppercase and
+	  vice- versa 
+
+INSIDE test.txt
+Hello World
+
+CREATED test1.txt
+HELLO WORLD
+*/
+
+#include <stdio.h>
+#include <ctype.h>
+
+void main()
+{
+    FILE *fp1, *fp2;
+    char a;
+
+    // FOR GOD SAKE PLEASE DONT FORGET TO CHAGE THE FILE NAME "test.txt"
+    fp1 = fopen("test.txt", "r");
+    if (fp1 == NULL)
+    {
+        puts("cannot open this file");
+        return;
+    }
+
+    // FOR GOD SAKE PLEASE DONT FORGET TO CHAGE THE FILE NAME "test1.txt"
+    fp2 = fopen("test1.txt", "w");
+    if (fp2 == NULL)
+    {
+        puts("Not able to open this file");
+        fclose(fp1);
+        return;
+    }
+
+    do
+    {
+        a = fgetc(fp1);
+        if (a >= 'a' && a <= 'z')
+            a = toupper(a);
+        else if (a >= 'A' && a <= 'Z')
+            a = tolower(a);
+        else
+            a = a;
+        fputc(a, fp2);
+    } while (a != EOF);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 23 Program to find if a given grammar is Regular or not 
+
+Input:S->a;
+Ouput: Yes
+
+Input:S->Ab;
+Output: No
+
+More case
+S->z
+T->aS
+(Yes)
+
+A->Ba
+B->c
+(No)
+*/
+
+#include <stdio.h>
+
+char data[10];
+int flag = 0;
+
+int is_upper_alphabet(char l)
+{
+    if (l >= 'A' && l <= 'Z')
+    {
+        return 1;
+    }
+    return 0;
+}
+int is_small(char l)
+{
+    if (l >= 'a' && l <= 'z')
+    {
+        return 1;
+    }
+    return 0;
+}
+int check(int i)
+{
+    while (data[i] != ';')
+    {
+        if (is_small(data[i]) && data[i + 1] == ';')
+        {
+            flag = 1;
+            break;
+        }
+        else if (is_small(data[i]) && is_upper_alphabet(data[i + 1]) && data[i + 2] == ';')
+        {
+            flag = 1;
+            break;
+        }
+        else if ((is_small(data[i]) && data[i + 1] == '|') ||
+                 (is_small(data[i]) && is_upper_alphabet(data[i + 1]) && data[i + 2] == '|'))
+        {
+            flag = check(i + 3);
+            break;
+        }
+        else
+        {
+            flag = 0;
+            break;
+        }
+        i++;
+    }
+    return flag;
+}
+int main()
+{
+    printf("Input a grammar(end with a semicolon): ");
+    gets(data);
+    //S->a
+    //S->aA
+    if (is_upper_alphabet(data[0]) && data[1] == '-' && data[2] == '>')
+    {
+        int i = 3;
+        int f = check(i);
+        if (f == 1)
+            printf("Grammar is Regular");
+        else
+            printf("Grammar is Not Regular");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 24 Program which can recognize whether an email address is valid or not 
+Input: abc@gmail.com
+Output: valid
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char str[100];
+    int flag = 0;
+
+    printf("Enter a email: \n");
+    gets(str);
+
+    int l = strlen(str);
+    for (int i = 0; i < l; i++)
+    {
+        if (str[i] == '@')
+            flag = 1;
+    }
+
+    if (flag == 1)
+        printf("Email is valid");
+    else
+        printf("Email is not valid");
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 25 Given a set of alphabets {a,b,c}, write a C program to find all the possible strings of
+	  length at most 3 
+
+OUTPUT WRONG
+
+*/
+
+#include <stdio.h>
+#define max 40
+
+void print_all(char set[], char prefix[max], int n, int k)
+{
+    if (k == 0)
+    {
+        printf("\n%s", prefix);
+        return;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        char newPrefix[max];
+        newPrefix[i] = prefix[i] + set[i];
+        print_all(set, newPrefix, n, k - 1);
+    }
+}
+void print_all_set(char set[], int n, int k)
+{
+    print_all(set, "", n, k - 1);
+}
+int main(int argc, char const *argv[])
+{
+
+    char set[] = {'a', 'b', 'c'};
+    int k = 3;
+    print_all_set(set, k, 2);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+/* 26 Program to find the number of new lines in a program 
+Input: asd asdas dgs
+Output:
+Blank Space = 2
+New line = 1
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char str[100];
+    int count = 1;
+    int count2 = 0;
+
+    printf("Enter string : ");
+    gets(str);
+
+    int l = strlen(str);
+    for (int i = 0; i < l; i++)
+    {
+        if ((str[i] == 92))
+            count++;
+        if (str[i] == ' ')
+            count2++;
+    }
+
+    printf("Blank Space = %d", count2);
+    printf("\nNew line = %d", count);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 27 Program to print the number of times a certain function is called */
+
+#include<stdio.h>
+
+static int c;
+static int d;
+
+void fun()
+{
+	c++;
+}
+void fun2()
+{
+	d++;
+}
+int main()
+{
+	c=0;
+	d=0;
+	fun();
+	fun();
+	fun();
+	fun();
+	fun2();
+	fun2();
+	fun2();
+	if(c==1)
+		printf("Function fun is called %d time\n",c);
+	else
+		printf("Function fun is called %d times\n",c);
+	if(d==1)
+		printf("Function fun2 is called %d time",d);
+	else
+		printf("Function fun2 is called %d times",d);
+		
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* 28 Program which will copy each line of a given program and number each newline 
+Input: Filename test.txt
+Output:
+Line 1: h
+Line 2: e
+Line 3: l
+Line 4: l
+Line 5: o
+
+INSIDE test.txt
+h
+e
+l
+l
+o
+
+*/
+
+#include <stdio.h>
+
+int main()
+{
+	FILE *fileptr;
+	int count_lines = 1, i = 0;
+	char filechar[40], chr, line[100];
+	
+	printf("Enter file name: ");
+	scanf("%s", filechar);
+	
+	fileptr = fopen(filechar, "r");
+	//extract character from file and store in chr
+	chr = getc(fileptr);
+	
+	while (chr != EOF)
+	{
+		if(chr != '\n'){
+			line[i] = chr;
+		}
+		else{
+			printf("Line %d: %s\n",count_lines, line);
+			i=0;
+			count_lines++;
+		}
+		chr = getc(fileptr);
+	}
+	fclose(fileptr); //close file.
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 29 Program in C to print an error when a user doesn’t provide a semi-colon at
+	  the end of a line of a program. User input should be a file containing a program 
+Input: Filename test.txt
+Output: Okay
+
+INSIDE test.txt
+int a = 10;
+float b=10;
+
+*/
+
+#include <stdio.h>
+int main()
+{
+    FILE *fileptr;
+    int count_lines = 0, counter_semicolon = 0;
+    char filechar[40], chr;
+
+    printf("Enter file name: ");
+    scanf("%s", filechar);
+
+    fileptr = fopen(filechar, "r");
+    //extract character from file and store in chr
+    chr = getc(fileptr);
+
+    while (chr != EOF)
+    {
+        //Count whenever new line is encountered
+        if (chr == '\n')
+            count_lines++;
+        if (chr == ';')
+            counter_semicolon++;
+        //take next character from file.
+        chr = getc(fileptr);
+    }
+
+    fclose(fileptr); //close file.
+    if (count_lines != counter_semicolon)
+        printf("Error");
+    else
+        printf("Okay");
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 30 Program to implement strcat() function */
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+	char a[100], b[100];
+	
+	printf("Enter the first string\n");
+	gets(a);
+	
+	printf("Enter the second string\n");
+	gets(b);
+	
+	strcat(a,b);
+	
+	printf("String obtained on concatenation is %s\n",a);
+	
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* 31 Program in C to count the number of blank spaces and print the number of lines 
+Input: hello world
+Output:
+Blank Space = 1
+New line = 1
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char str[100];
+    int count = 1;
+    int count2 = 0;
+    printf("Enter string : ");
+    gets(str);
+    int l = strlen(str);
+    for (int i = 0; i < l; i++)
+    {
+        if ((str[i] == 92))
+            count++;
+        if (str[i] == ' ')
+            count2++;
+    }
+
+    printf("Blank Space = %d", count2);
+    printf("\nNew line = %d", count);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 32 Program that will count the number of lowercase and uppercase characters
+	  from a file 
+Input: Hello World
+Output: Total Upper case characters: 2, Lower Case characters: 8
+*/
+
+#include <stdio.h>
+
+int main()
+{
+    char str[100];
+    int countL, countU;
+    int counter;
+
+    //assign all counters to zero
+    countL = countU = 0;
+    printf("Enter a string: ");
+    gets(str);
+    for (counter = 0; str[counter] != '\0'; counter++)
+    {
+        if (str[counter] >= 'A' && str[counter] <= 'Z')
+            countU++;
+        else if (str[counter] >= 'a' && str[counter] <= 'z')
+            countL++;
+    }
+
+    printf("Total Upper case characters: %d, Lower Case characters: %d", countU, countL);
+
+    return 0;
+}
